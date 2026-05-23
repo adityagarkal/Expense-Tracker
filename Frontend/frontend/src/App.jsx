@@ -7,17 +7,14 @@ import { Route, Routes } from 'react-router-dom'
 
 const App = () => {
   return (
-    <div className='bg-gradient-to-br from-[#0f172a] via-[#1e293b] to-[#020617] text-white  '>
-        
-      { <Routes>
-        <Route path= "/" element={< Login />} />
-        <Route path= "/register" element={<Register />} />
-        <Route path= "/dashboard" element={<Dashboard />} />
-      </Routes> }
+    <div className="bg-[#0a0a0f] min-h-screen text-white">
+      <Routes>
+        <Route path="/" element={<Login />} />
+        <Route path="/register" element={<Register />} />
+        <Route path="/dashboard" element={<Dashboard />} />
+      </Routes>
     </div>
   )
 }
- 
-export default App
 
-// flex items-center justify-center flex-col
+export default App

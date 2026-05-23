@@ -1,73 +1,87 @@
 import React, { useState } from 'react'
 import API from "../../Services/api"
 
+const inputBase = "w-full px-4 py-3 rounded-xl bg-white/[0.03] border border-white/[0.08] text-slate-100 text-sm placeholder-slate-600 outline-none transition-all duration-200 focus:border-amber-400/50 focus:bg-amber-400/[0.03]"
+const labelBase = "block text-[10px] font-mono tracking-[0.15em] text-slate-500 uppercase mb-1.5"
+
 const LoginForm = () => {
-    const [email, setEmail] = useState("")
-    const [password, setPassword] = useState("")
+  const [email, setEmail] = useState("")
+  const [password, setPassword] = useState("")
+  const [loading, setLoading] = useState(false)
 
-    
-    const handleLogin = async (e) => {
-        e.preventDefault();    
+  const handleLogin = async (e) => {
+    e.preventDefault()
+    setLoading(true)
+    try {
+      const res = await API.post("/api/login", { email, password })
 
-        try {
-            const res = await API.post("/api/login", {
-                email,
-                password
-            });
+      // SAVE TOKEN
+      localStorage.setItem("token", res.data.token)
 
-            console.log(res.data);
+      // SAVE USER ID
+      localStorage.setItem(
+        "userID",
+        res.data.user.id
+      )
+      window.location.href = "/dashboard"
+    } catch (error) {
+      console.log(error.response?.data)
+      alert("Invalid Credentials")
+    } finally {
+      setLoading(false)
+    }
+  }
 
-            localStorage.setItem("userID", res.data.user.id)     // store userID in localstorage
+  const redirectToRegister = (e) => {
+    e.preventDefault()
+    window.location.href = "/register"
+  }
 
-            // alert("Login Successful")
-
-            window.location.href = "/dashboard"
-        } catch (error) {
-            console.log(error.response?.data);
-            alert("Invalid Credentials")
-            }
-        }
-
-    const redirectToRegister = (e) => {
-        e.preventDefault();
-        window.location.href = "/register"
-        } 
   return (
-        
-        <div>
-        <form onSubmit={handleLogin} className='flex flex-col items-center text-white gap-4 '>
-                
-            <input 
-            type="email" 
-            placeholder='Email'
-            onChange={(e)=>setEmail(e.target.value)}
-            className='border border-gray-600 text-white placeholder-gray-400 rounded px-2 py-1 text-sm'
-            />
+    <form onSubmit={handleLogin} className="flex flex-col gap-4">
 
-            <input 
-            type="password" 
-            placeholder='Password'
-            onChange={(e)=>setPassword(e.target.value)}
-            className='border border-gray-600 text-white placeholder-gray-400 rounded px-2 py-1 text-sm'
-            />
+      <div>
+        <label className={labelBase}>Email Address</label>
+        <input
+          type="email"
+          placeholder="you@example.com"
+          onChange={(e) => setEmail(e.target.value)}
+          className={inputBase}
+        />
+      </div>
 
-            <button className='w-45 py-3 px-4 rounded-lg font-medium transition-all duration-300 bg-gradient-to-r from-[#3b82f6] to-[#2563eb] hover:from-[#2563eb] hover:to-[#1d4ed8]'>Login</button>
+      <div>
+        <label className={labelBase}>Password</label>
+        <input
+          type="password"
+          placeholder="••••••••"
+          onChange={(e) => setPassword(e.target.value)}
+          className={inputBase}
+        />
+      </div>
 
-            <div className="flex items-center gap-3 w-130">
-  
-            <div className="flex-1 h-[1px] bg-gray-600"></div>
+      <button
+        type="submit"
+        disabled={loading}
+        className="mt-1 w-full py-3 rounded-xl bg-gradient-to-r from-amber-400 to-amber-600 text-[#0a0a0f] font-bold text-sm tracking-wider font-mono transition-opacity duration-200 hover:opacity-85 disabled:opacity-50 disabled:cursor-not-allowed"
+      >
+        {loading ? 'AUTHENTICATING...' : 'SIGN IN →'}
+      </button>
 
-              <p className="text-gray-400 text-sm whitespace-nowrap">
-                Don’t have an account?
-              </p>
+      <div className="flex items-center gap-3 my-1">
+        <div className="flex-1 h-px bg-white/5" />
+        <span className="text-[11px] font-mono text-slate-600">OR</span>
+        <div className="flex-1 h-px bg-white/5" />
+      </div>
 
-              <div className="flex-1 h-[1px] bg-gray-600"></div>
+      <button
+        onClick={redirectToRegister}
+        className="w-full py-3 rounded-xl border border-white/[0.08] text-slate-400 text-sm font-mono tracking-wider hover:border-amber-400/30 hover:text-amber-400 transition-all duration-200"
+      >
+        CREATE ACCOUNT
+      </button>
 
-            </div>
-            
-            <button onClick={redirectToRegister} className='w-40 py-2 rounded-lg border border-white/20 text-gray-300 hover:bg-white/10 transition-all duration-200' >Create new account</button>
-        </form>
-        </div>
+    </form>
   )
 }
 

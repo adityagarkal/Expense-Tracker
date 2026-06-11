@@ -90,8 +90,8 @@ async function handleLoginUser(req, res) {
         email: user.email
       }
     })
-    .then(console.log("success")
-    )
+    // .then(console.log("success")
+    // )
 }
 
 module.exports = {

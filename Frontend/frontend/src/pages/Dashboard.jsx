@@ -20,6 +20,7 @@ const Dashboard = () => {
   const [searchTerm, setSearchTerm] = useState("")
   const [sortOption, setSortOption] = useState("newest")
   const userID = localStorage.getItem("userID")
+  const userName = localStorage.getItem("userName")
 
   useEffect(() => {
 
@@ -71,7 +72,10 @@ const Dashboard = () => {
         <div className="flex justify-between items-end pb-1 border-b border-white/[0.04]">
           <div>
             <p className="text-[10px] font-mono tracking-[0.2em] text-slate-600 uppercase mb-1.5">Financial Overview</p>
-            <h1 className="text-3xl font-bold text-slate-100 tracking-tight">Dashboard</h1>
+            {/* <h1 className="text-3xl font-bold text-slate-100 tracking-tight">Dashboard</h1> */}
+            <h1 className="text-3xl font-bold text-slate-100 tracking-tight">
+              Welcome, {userName}
+            </h1>
           </div>
           <p className="text-[11px] font-mono text-slate-700">
             {new Date().toLocaleDateString('en-IN', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}

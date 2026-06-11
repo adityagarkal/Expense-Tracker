@@ -15,6 +15,8 @@ const LoginForm = () => {
     try {
       const res = await API.post("/api/login", { email, password })
 
+      console.log(res.data)
+
       // SAVE TOKEN
       localStorage.setItem("token", res.data.token)
 
@@ -22,6 +24,11 @@ const LoginForm = () => {
       localStorage.setItem(
         "userID",
         res.data.user.id
+      )
+
+      localStorage.setItem(
+        "userName",
+        res.data.user.name
       )
       window.location.href = "/dashboard"
     } catch (error) {
